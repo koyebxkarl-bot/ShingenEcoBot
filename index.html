@@ -41,6 +41,7 @@
     background:linear-gradient(90deg,var(--accent1),var(--accent2));
     color:#05030a;padding:10px 18px;border-radius:12px;
     text-decoration:none;font-weight:700;margin-left:10px;
+    border:none;cursor:pointer;
   }
 
   .card{
@@ -51,7 +52,6 @@
   .big{font-size:30px;font-weight:800;color:var(--accent2);}
   .section-title{font-size:20px;font-weight:800;margin-bottom:12px;}
 
-  /* leaderboard */
   .leaderboard-entry{
     padding:8px 0;
     border-bottom:1px solid rgba(255,255,255,0.05);
@@ -83,20 +83,19 @@
   }
   .p-name{display:flex;align-items:center;gap:10px;}
 
-  /* shop section */
+  /* shop */
   .shop-grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
     gap:14px;margin-top:10px;
   }
-
   .shop-item{
     background:var(--glass);
     border:1px solid rgba(255,255,255,0.05);
     padding:14px;border-radius:10px;
   }
 
-  /* updates section */
+  /* updates */
   .update-box{
     background:var(--glass);
     border-left:4px solid var(--accent1);
@@ -154,49 +153,103 @@
   <div id="updatesList">Loading...</div>
 </div>
 
+<!-- MEGA EVENT COUNTDOWN -->
+<div class="card">
+  <div class="section-title">⚡ Mega Event Countdown</div>
+  <div id="eventStatus" style="font-size:18px;color:var(--muted);">Loading...</div>
+  <div id="eventTimer" class="big" style="margin-top:8px;">--:--:--</div>
+</div>
+
+<!-- VIP SECTION -->
+<div class="card">
+  <div class="section-title">💎 VIP Membership</div>
+  <p style="color:var(--muted);font-size:14px;">
+    Unlock exclusive rewards and dominate the ShinGenEco Casino.
+  </p>
+  <ul style="line-height:1.7;color:var(--muted);font-size:14px;">
+    <li>+20% Higher Winnings</li>
+    <li>Exclusive VIP Items</li>
+    <li>VIP Profile Badge</li>
+    <li>Higher Hack Success</li>
+    <li>Boosted Daily Rewards</li>
+  </ul>
+  <a class="btn" href="https://t.me/ShinGenEco_bot">Become VIP</a>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="card">
+  <div class="section-title">🔐 Admin Dashboard</div>
+  <button class="btn" onclick="openAdmin()">Open Dashboard</button>
+
+  <div id="adminPanel" style="display:none;margin-top:14px;">
+    <h3>Admin Controls</h3>
+
+    <div class="update-box">
+      <b>Update Jackpot</b><br>
+      <input id="newJackpot" placeholder="Enter amount" style="width:90%;padding:6px;border-radius:8px;">
+      <button class="btn" style="margin-top:8px;">Save</button>
+    </div>
+
+    <div class="update-box">
+      <b>Post New Update</b><br>
+      <input id="uTitle" placeholder="Title" style="width:90%;padding:6px;border-radius:8px;margin-top:6px;">
+      <input id="uDesc" placeholder="Description" style="width:90%;padding:6px;border-radius:8px;margin-top:6px;">
+      <button class="btn" style="margin-top:8px;">Add Update</button>
+    </div>
+  </div>
+</div>
+
 <footer style="margin-top:20px;text-align:center;color:var(--muted);font-size:13px;">
-  ShinGenEco © 2025 — Built with Neon Theme
+  ShinGenEco © 2025 — Neon Casino UI
 </footer>
 
 </div>
 
 <script>
-// fetch helper
 async function loadJSON(file){
-  try {
+  try{
     let res = await fetch(file + "?v=" + Date.now());
     return await res.json();
-  } catch(e){
+  }catch(e){
     return null;
+  }
+}
+
+function openAdmin(){
+  let pass = prompt("Enter Admin Password:");
+  if(pass === "ShinAdmin123"){
+    document.getElementById("adminPanel").style.display = "block";
+  } else {
+    alert("Access Denied");
   }
 }
 
 (async function(){
 
-  // load all JSON
   let jackpot = await loadJSON("jackpot.json");
   let players = await loadJSON("players.json");
   let profiles = await loadJSON("profiles.json");
   let shop = await loadJSON("shop.json");
   let updates = await loadJSON("updates.json");
+  let event = await loadJSON("event.json");
 
-  // JACKPOT
+  // jackpot
   document.getElementById("jackpotPool").innerText =
     "₵ " + jackpot.jackpot_pool.toLocaleString();
 
   document.getElementById("jackpotWinner").innerText =
     "Last Winner: " + jackpot.last_winner;
 
-  // LEADERBOARD
+  // leaderboard
   let lb = "";
-  players.top.forEach((p, i)=>{
+  players.top.forEach((p,i)=>{
     lb += `<div class="leaderboard-entry">
       <b>${i+1}. ${p.name}</b> — ₵ ${p.coins.toLocaleString()}
     </div>`;
   });
   document.getElementById("leaderboardList").innerHTML = lb;
 
-  // PROFILES
+  // profiles
   let pg = "";
   profiles.players.forEach(p=>{
     pg += `
@@ -217,7 +270,7 @@ async function loadJSON(file){
   });
   document.getElementById("profilesGrid").innerHTML = pg;
 
-  // SHOP
+  // shop
   let sg = "";
   shop.items.forEach(item=>{
     sg += `
@@ -230,7 +283,7 @@ async function loadJSON(file){
   });
   document.getElementById("shopGrid").innerHTML = sg;
 
-  // UPDATES
+  // updates
   let up = "";
   updates.list.forEach(u=>{
     up += `
@@ -242,6 +295,30 @@ async function loadJSON(file){
     `;
   });
   document.getElementById("updatesList").innerHTML = up;
+
+  // mega event countdown
+  if(event && event.ends_at){
+    let end = new Date(event.ends_at);
+    document.getElementById("eventStatus").innerText =
+      "Event: " + event.event_name;
+
+    setInterval(()=>{
+      let now = new Date();
+      let diff = end - now;
+
+      if(diff <= 0){
+        document.getElementById("eventTimer").innerText = "Event Ended";
+        return;
+      }
+
+      let h = Math.floor(diff / (1000*60*60));
+      let m = Math.floor((diff % (1000*60*60)) / (1000*60));
+      let s = Math.floor((diff % (1000*60)) / 1000);
+
+      document.getElementById("eventTimer").innerText =
+        `${h}h ${m}m ${s}s`;
+    }, 1000);
+  }
 
 })();
 </script>
