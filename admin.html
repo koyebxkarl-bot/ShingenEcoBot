@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — ShinGenEco</title>
+
+<style>
+  body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: #05030a;
+    color: white;
+  }
+  .center {
+    max-width: 480px;
+    margin: 80px auto;
+    background: rgba(255,255,255,0.03);
+    padding: 24px;
+    border-radius: 12px;
+    border:1px solid rgba(255,255,255,0.1);
+  }
+  input, textarea, select {
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:8px;
+    color:white;
+  }
+  .btn {
+    background:linear-gradient(90deg,#ff2fa6,#6be0ff);
+    padding:10px 16px;
+    border:none;
+    border-radius:10px;
+    color:#05030a;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  .section {
+    background:rgba(255,255,255,0.03);
+    padding:18px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.1);
+    margin-bottom:20px;
+  }
+  #panel { display:none; }
+  h2 { margin-top:0 }
+</style>
+
+</head>
+<body>
+
+<div id="login" class="center">
+  <h2>Admin Login</h2>
+  <p>Enter admin password to access the dashboard.</p>
+  <input id="adminPass" type="password" placeholder="Password">
+  <button class="btn" onclick="login()">Login</button>
+</div>
+
+<div id="panel" class="center">
+  <h2>ShinGenEco Admin Dashboard</h2>
+  <p style="color:#bfb8c8;font-size:13px;">You are logged in.</p>
+
+  <!-- JACKPOT -->
+  <div class="section">
+    <h3>Update Jackpot</h3>
+    <input id="jackpotAmount" placeholder="New jackpot amount">
+    <button class="btn" onclick="saveJackpot()">Save Jackpot</button>
+  </div>
+
+  <!-- EVENT -->
+  <div class="section">
+    <h3>Update Mega Event</h3>
+    <input id="eventName" placeholder="Event name">
+    <input id="eventEnd" placeholder="End time (YYYY-MM-DDTHH:MM:SSZ)">
+    <button class="btn" onclick="saveEvent()">Save Event</button>
+  </div>
+
+  <!-- UPDATES -->
+  <div class="section">
+    <h3>Post Update</h3>
+    <input id="updTitle" placeholder="Title">
+    <textarea id="updDesc" placeholder="Description"></textarea>
+    <button class="btn" onclick="addUpdate()">Add Update</button>
+  </div>
+
+  <!-- SHOP -->
+  <div class="section">
+    <h3>Add Shop Item</h3>
+    <input id="shopName" placeholder="Item name">
+    <input id="shopPrice" placeholder="Price">
+    <textarea id="shopDesc" placeholder="Description"></textarea>
+    <button class="btn" onclick="addShopItem()">Add Item</button>
+  </div>
+
+  <p style="color:#777;font-size:12px;margin-top:20px;text-align:center;">
+    NOTE: GitHub cannot be updated automatically unless API integration is enabled.
+  </p>
+
+</div>
+
+<script>
+// Password (change later)
+const ADMIN_PASSWORD = "ShinAdmin123";
+
+// Login
+function login(){
+  let p = document.getElementById("adminPass").value;
+  if(p === ADMIN_PASSWORD){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("panel").style.display = "block";
+  } else {
+    alert("Incorrect password");
+  }
+}
+
+// Saving functions — Right now these ONLY SHOW JSON (manual copy to GitHub)
+// When you want AUTO-UPDATE, I'll connect GitHub API for full automation.
+
+function saveJackpot(){
+  let amount = document.getElementById("jackpotAmount").value;
+  if(!amount) return alert("Enter amount");
+  let json = {
+    jackpot_pool: Number(amount),
+    last_winner: "Updated by Admin"
+  };
+  alert("Copy to jackpot.json:\n\n" + JSON.stringify(json, null, 2));
+}
+
+function saveEvent(){
+  let name = document.getElementById("eventName").value;
+  let end = document.getElementById("eventEnd").value;
+  if(!name || !end) return alert("Fill all fields");
+  let json = { event_name: name, ends_at: end };
+  alert("Copy to event.json:\n\n" + JSON.stringify(json, null, 2));
+}
+
+function addUpdate(){
+  let title = document.getElementById("updTitle").value;
+  let desc = document.getElementById("updDesc").value;
+  let json = {
+    title: title,
+    date: new Date().toISOString().split("T")[0],
+    desc: desc
+  };
+  alert("Add this to updates.json list:\n\n" + JSON.stringify(json, null, 2));
+}
+
+function addShopItem(){
+  let name = document.getElementById("shopName").value;
+  let price = document.getElementById("shopPrice").value;
+  let desc = document.getElementById("shopDesc").value;
+
+  let json = {
+    name: name,
+    price: Number(price),
+    desc: desc
+  };
+  alert("Add this to shop.json items:\n\n" + JSON.stringify(json, null, 2));
+}
+</script>
+
+</body>
+</html>
