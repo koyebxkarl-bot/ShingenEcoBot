@@ -1,0 +1,7 @@
+{
+  "players": [
+    { "name": "Karl", "coins": 120000, "bank": 50000, "level": 12 },
+    { "name": "Ravi", "coins": 85000, "bank": 20000, "level": 8 },
+    { "name": "Maya", "coins": 63000, "bank": 12000, "level": 7 }
+  ]
+}
