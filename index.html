@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ShinGenEco — Neon Casino</title>
+  <meta name="description" content="ShinGenEco — Telegram casino bot. Slots, dice, events, jackpots." />
+
+  <style>
+    :root{
+      --bg:#05030a;
+      --card:#0f0c14;
+      --accent1:#ff2fa6;
+      --accent2:#6be0ff;
+      --glow1: 0 8px 30px rgba(255,47,166,0.12);
+      --glow2: 0 8px 40px rgba(107,224,255,0.08);
+      --muted: #bfb8c8;
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      --mono: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#04030a 0%, #0b0812 100%);font-family:var(--mono);color:#fff;-webkit-font-smoothing:antialiased}
+    .wrap{max-width:1150px;margin:36px auto;padding:28px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{
+      width:64px;height:64px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      box-shadow:var(--glow1),var(--glow2);
+      display:flex;align-items:center;justify-content:center;font-weight:700;
+      font-size:20px;color:#05030a;
+    }
+    h1{margin:0;font-size:22px;letter-spacing:0.4px}
+    .subtitle{color:var(--muted);font-size:13px;margin-top:4px}
+
+    .top-actions{display:flex;gap:12px}
+    .btn{
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:#05030a;padding:10px 16px;border-radius:12px;text-decoration:none;font-weight:700;
+      box-shadow:var(--glow1);
+    }
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px;border-radius:10px;text-decoration:none}
+
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px;border-radius:var(--radius);box-shadow: 0 4px 30px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03)}
+    .jackpot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .jackpot .big{font-size:28px;font-weight:800;letter-spacing:0.6px;color:var(--accent2)}
+    .jackpot .sub{color:var(--muted);font-size:13px}
+    .stats{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+    .stat{background:var(--glass);padding:10px 12px;border-radius:10px;color:var(--muted);font-weight:700}
+
+    .profiles{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+    .profile{
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .profile:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.6)}
+    .p-name{display:flex;align-items:center;gap:10px}
+    .p-avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent2),var(--accent1));display:flex;align-items:center;justify-content:center;font-weight:800;color:#05030a}
+    .p-data{margin-top:10px;color:var(--muted);font-size:13px}
+    .vip{color:gold;font-weight:800}
+
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+    .feature{padding:12px;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.03)}
+    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px;padding:24px 0}
+
+    /* responsive */
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.brand h1{display:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">SG</div>
+        <div>
+          <h1>ShinGenEco — Neon Casino</h1>
+          <div class="subtitle">Play • Earn • Compete — @ShinGenEco_bot</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <a class="btn" href="https://t.me/ShinGenEco_bot" target="_blank" rel="noopener">Start Bot</a>
+        <a class="btn" href="https://t.me/updates_Shin" target="_blank" rel="noopener">Updates</a>
+        <a class="ghost" href="#features">Features</a>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- left: main -->
+      <div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="color:var(--muted);font-weight:700">LIVE JACKPOT</div>
+              <div style="display:flex;align-items:baseline;gap:10px;margin-top:8px">
+                <div class="big" id="jackpotPool">—</div>
+                <div class="sub" id="jackpotInfo">Loading...</div>
+              </div>
+              <div style="margin-top:12px;color:var(--muted);font-size:13px">Updates: <span id="lastUpdate">—</span></div>
+            </div>
+            <div style="text-align:right">
+              <div style="color:var(--muted);font-size:13px">Players</div>
+              <div style="font-size:20px;font-weight:800" id="totalPlayers">—</div>
+              <div style="margin-top:8px"><a class="btn" href="https://t.me/ShinGenEco_bot" target="_blank">Play Now</a></div>
+            </div>
+          </div>
+
+          <div class="stats" id="quickStats">
+            <!-- dynamic small stats -->
+          </div>
+
+          <div style="margin-top:14px">
+            <div style="font-weight:800;margin-bottom:8px">Top players</div>
+            <div id="topList" style="color:var(--muted);font-size:14px">Loading...</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <div style="font-weight:800">Player Profiles</div>
+          <div class="profiles" id="profilesGrid">
+            <!-- profile cards loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- right: sidebar -->
+      <aside>
+        <div class="card">
+          <div style="font-weight:800">Commands</div>
+          <div style="margin-top:10px;color:var(--muted);line-height:1.65">
+            /start • /balance • /bank • /slots • /dice • /flip • /buyticket • /illegal • /hack • /shop • /inventory • /leaderboard
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div style="font-weight:800">Features</div>
+          <div class="features" id="features">
+            <div class="feature">Mega Events</div>
+            <div class="feature">Shop & Inventory</div>
+            <div class="feature">Jackpot & Tickets</div>
+            <div class="feature">Hacks & Missions</div>
+            <div class="feature">Live Leaderboard</div>
+            <div class="feature">Player Profiles</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div style="font-weight:800">Quick Links</div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+            <a class="ghost" href="https://t.me/ShinGenEco_bot" target="_blank">Open Bot</a>
+            <a class="ghost" href="https://t.me/updates_Shin" target="_blank">Updates Channel</a>
+            <a class="ghost" href="https://t.me/ShinGenEco_bot?start=ref" target="_blank">Invite & Earn</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div id="footerText">ShinGenEco • Neon Casino • Built for Telegram</div>
+    </footer>
+  </div>
+
+  <script>
+    // --- helper to fetch JSON with graceful fallback
+    async function fetchJson(path, fallback){
+      try {
+        let r = await fetch(path + '?t=' + Date.now());
+        if(!r.ok) return fallback;
+        return await r.json();
+      } catch(e){
+        return fallback;
+      }
+    }
+
+    (async function init(){
+      // load jackpot + players + profiles
+      const jackpot = await fetchJson('jackpot.json', { jackpot_pool: 0, last_winner: '—' });
+      const players = await fetchJson('players.json', { total_players: 0, richest_player: '—', richest_coins: 0, top: [] });
+      const profiles = await fetchJson('profiles.json', { players: [] });
+
+      // update jackpot UI
+      document.getElementById('jackpotPool').innerText = '₵ ' + (jackpot.jackpot_pool || 0).toLocaleString();
+      document.getElementById('jackpotInfo').innerText = 'Last winner: ' + (jackpot.last_winner || '—');
+      document.getElementById('lastUpdate').innerText = new Date().toLocaleString();
+
+      // players
+      document.getElementById('totalPlayers').innerText = (players.total_players || 0);
+
+      // quick stats
+      const quick = document.getElementById('quickStats');
+      quick.innerHTML = '';
+      quick.appendChild(statEl('Richest: ' + (players.richest_player || '—')));
+      quick.appendChild(statEl('Richest Coins: ' + (players.richest_coins || 0).toLocaleString()));
+
+      // top list
+      const topList = document.getElementById('topList');
+      let top = players.top && players.top.length ? players.top.slice(0,5) : [];
+      if(top.length === 0) topList.innerText = 'No leaderboard data available';
+      else {
+        topList.innerHTML = top.map((p,i) => (i+1)+'. ' + escapeHtml(p.name) + ' — ' + Number(p.coins).toLocaleString()).join('<br>');
+      }
+
+      // profiles grid
+      const pg = document.getElementById('profilesGrid');
+      pg.innerHTML = '';
+      (profiles.players || []).forEach(p=>{
+        const el = document.createElement('div');
+        el.className = 'profile';
+        const vip = p.vip ? '<span class="vip">VIP</span>' : '';
+        el.innerHTML =
+          '<div class="p-name"><div class="p-avatar">'+escapeHtml((p.name||'U').slice(0,2).toUpperCase())+'</div>' +
+          '<div><strong>'+escapeHtml(p.name)+'</strong><div style="color:var(--muted);font-size:13px">'+(p.title || '')+'</div></div></div>' +
+          '<div class="p-data">💰 Wallet: '+Number(p.coins).toLocaleString()+'<br>🏦 Bank: '+Number(p.bank).toLocaleString()+'<br>🎮 Level: '+(p.level||0)+' '+vip+'</div>';
+        pg.appendChild(el);
+      });
+
+      // small helper functions
+      function statEl(text){
+        const d = document.createElement('div');
+        d.className = 'stat';
+        d.innerText = text;
+        return d;
+      }
+      function escapeHtml(s){
+        return String(s).replace(/[&<>"']/g, (m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+      }
+    })();
+  </script>
+</body>
+</html>
