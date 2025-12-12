@@ -1,0 +1,9 @@
+{
+  "items": [
+    { "name": "Ultra Lucky Star Charm", "price": 75000, "desc": "+12% win chance for 24h" },
+    { "name": "High Roller Max Booster", "price": 150000, "desc": "+50% bonus on high wins" },
+    { "name": "Elite Hacker Toolkit", "price": 110000, "desc": "+12% hack success for 10 uses" },
+    { "name": "Jackpot Quantum Magnet", "price": 250000, "desc": "Triple jackpot chance" },
+    { "name": "Mega Lucky Crystal", "price": 300000, "desc": "Guaranteed win next game" }
+  ]
+}
